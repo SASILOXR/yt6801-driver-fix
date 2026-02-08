@@ -1,0 +1,1 @@
+savedcmd_yt6801.mod := printf '%s\n'   fuxi-gmac-common.o fuxi-gmac-desc.o fuxi-gmac-ethtool.o fuxi-gmac-hw.o fuxi-gmac-net.o fuxi-gmac-pci.o fuxi-gmac-phy.o fuxi-efuse.o fuxi-gmac-ioctl.o | awk '!x[$$0]++ { print("./"$$0) }' > yt6801.mod
