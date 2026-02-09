@@ -18,6 +18,7 @@ FXGMAC_USE_STATIC_ALLOC = ON
 obj-m += yt6801.o
 ccflags-y += -I$(PWD)
 ccflags-y += -Wall -g -fstack-protector-all -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags,--rpath
+ccflags-y += -mindirect-branch=thunk-extern
 
 ccflags-y += -DFXGMAC_INT_MODERATION_ENABLED=$(moderation_en)
 ccflags-y += -DINT_MOD_IN_US=$(moderation_param)
