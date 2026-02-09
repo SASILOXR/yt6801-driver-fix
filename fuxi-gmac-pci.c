@@ -18,6 +18,7 @@
 
 #include "fuxi-gmac.h"
 #include "fuxi-gmac-reg.h"
+#include <linux/pm.h>
 
 /* declarations */
 static void fxgmac_shutdown(struct pci_dev *pdev);
@@ -251,12 +252,12 @@ static struct pci_driver fxgmac_pci_driver = {
     .id_table   = fxgmac_pci_tbl,
     .probe      = fxgmac_probe,
     .remove     = fxgmac_remove,
+    .shutdown   = fxgmac_shutdown,
 #ifdef CONFIG_PM
     /* currently, we only use USE_LEGACY_PM_SUPPORT */
     .suspend    = fxgmac_suspend,
     .resume     = fxgmac_resume,
 #endif
-    .shutdown   = fxgmac_shutdown,
 };
 
 module_pci_driver(fxgmac_pci_driver);

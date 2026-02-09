@@ -16,45 +16,45 @@ FXGMAC_EPHY_LOOPBACK_DETECT_ENABLED = OFF
 FXGMAC_USE_STATIC_ALLOC = ON
 
 obj-m += yt6801.o
-EXTRA_CFLAGS += -I$(PWD)
-EXTRA_CFLAGS += -Wall -g -fstack-protector-all -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags,--rpath
+ccflags-y += -I$(PWD)
+ccflags-y += -Wall -g -fstack-protector-all -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags,--rpath
 
-EXTRA_CFLAGS += -DFXGMAC_INT_MODERATION_ENABLED=$(moderation_en)
-EXTRA_CFLAGS += -DINT_MOD_IN_US=$(moderation_param)
+ccflags-y += -DFXGMAC_INT_MODERATION_ENABLED=$(moderation_en)
+ccflags-y += -DINT_MOD_IN_US=$(moderation_param)
 
 ifeq (,$(filter OFF off, $(FXGMAC_SMART_SPEED_DISABLE)))
-	EXTRA_CFLAGS += -DFXGMAC_SMART_SPEED_DISABLE
+	ccflags-y += -DFXGMAC_SMART_SPEED_DISABLE
 endif
 
 ifeq (,$(filter OFF off, $(FXGMAC_PHY_SLEEP_ENABLE)))
-	EXTRA_CFLAGS += -DFXGMAC_PHY_SLEEP_ENABLE
+	ccflags-y += -DFXGMAC_PHY_SLEEP_ENABLE
 endif
 
 ifeq (,$(filter OFF off, $(FXGMAC_NOT_USE_PAGE_MAPPING)))
-	EXTRA_CFLAGS += -DFXGMAC_NOT_USE_PAGE_MAPPING
+	ccflags-y += -DFXGMAC_NOT_USE_PAGE_MAPPING
 	ifeq (,$(filter OFF off, $(FXGMAC_ZERO_COPY)))
-		EXTRA_CFLAGS += -DFXGMAC_ZERO_COPY
+		ccflags-y += -DFXGMAC_ZERO_COPY
 	endif
 endif
 
 ifeq (,$(filter OFF off, $(FXGMAC_DEBUG)))
-	EXTRA_CFLAGS += -DFXGMAC_DEBUG
+	ccflags-y += -DFXGMAC_DEBUG
 endif
 
 ifeq (,$(filter OFF off, $(FXGMAC_TX_DMA_MAP_SINGLE)))
-	EXTRA_CFLAGS += -DFXGMAC_TX_DMA_MAP_SINGLE
+	ccflags-y += -DFXGMAC_TX_DMA_MAP_SINGLE
 endif
 
 ifeq (,$(filter OFF off, $(FXGMAC_EPHY_LOOPBACK_DETECT_ENABLED)))
-	EXTRA_CFLAGS += -DFXGMAC_EPHY_LOOPBACK_DETECT_ENABLED
+	ccflags-y += -DFXGMAC_EPHY_LOOPBACK_DETECT_ENABLED
 endif
 
 ifeq (,$(filter OFF off, $(FXGMAC_ASPM_ENABLED)))
-	EXTRA_CFLAGS += -DFXGMAC_ASPM_ENABLED
+	ccflags-y += -DFXGMAC_ASPM_ENABLED
 endif
 
 ifeq (,$(filter OFF off, $(FXGMAC_USE_STATIC_ALLOC)))
-	EXTRA_CFLAGS += -DFXGMAC_USE_STATIC_ALLOC
+	ccflags-y += -DFXGMAC_USE_STATIC_ALLOC
 endif
 
 yt6801-objs :=  fuxi-gmac-common.o fuxi-gmac-desc.o fuxi-gmac-ethtool.o fuxi-gmac-hw.o fuxi-gmac-net.o fuxi-gmac-pci.o fuxi-gmac-phy.o fuxi-efuse.o  fuxi-gmac-ioctl.o

@@ -50,7 +50,6 @@ int fxgmac_phy_force_mode(struct fxgmac_pdata *pdata)
     regval = FXGMAC_SET_REG_BITS(regval, PHY_CR_AUTOENG_POS, PHY_CR_AUTOENG_LEN, pdata->phy_autoeng);
     regval = FXGMAC_SET_REG_BITS(regval, PHY_CR_SPEED_SEL_H_POS, PHY_CR_SPEED_SEL_H_LEN, high_bit);
     regval = FXGMAC_SET_REG_BITS(regval, PHY_CR_SPEED_SEL_L_POS, PHY_CR_SPEED_SEL_L_LEN, low_bit);
-    regval = FXGMAC_SET_REG_BITS(regval, PHY_CR_DUPLEX_POS, PHY_CR_DUPLEX_LEN, pdata->phy_duplex);
     regval = FXGMAC_SET_REG_BITS(regval, PHY_CR_RESET_POS, PHY_CR_RESET_LEN, 1);
     ret = hw_ops->write_ephy_reg(pdata, REG_MII_BMCR, regval);
     return ret;
@@ -325,7 +324,7 @@ static void fxgmac_phy_link_poll(unsigned long data)
 #endif
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0))
-    struct fxgmac_pdata *pdata = from_timer(pdata, t, expansion.phy_poll_tm);
+    struct fxgmac_pdata *pdata = timer_container_of(pdata, t, expansion.phy_poll_tm);
 #else
     struct fxgmac_pdata *pdata = (struct fxgmac_pdata*)data;
 #endif
@@ -353,7 +352,7 @@ static void fxgmac_phy_link_poll(unsigned long data)
 int fxgmac_phy_timer_init(struct fxgmac_pdata *pdata)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0))
-    init_timer_key(&pdata->expansion.phy_poll_tm, NULL, 0, "fuxi_phy_link_update_timer", NULL);
+    __timer_init(&pdata->expansion.phy_poll_tm, fxgmac_phy_link_poll, 0);
 #else
     init_timer_key(&pdata->expansion.phy_poll_tm, 0, "fuxi_phy_link_update_timer", NULL);
 #endif
@@ -370,6 +369,6 @@ int fxgmac_phy_timer_init(struct fxgmac_pdata *pdata)
 
 void fxgmac_phy_timer_destroy(struct fxgmac_pdata *pdata)
 {
-    del_timer_sync(&pdata->expansion.phy_poll_tm);
+    timer_delete_sync(&pdata->expansion.phy_poll_tm);
     DPRINTK("fxgmac_phy_timer removed\n");
 }
